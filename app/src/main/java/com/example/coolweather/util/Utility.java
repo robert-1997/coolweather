@@ -1,10 +1,13 @@
 package com.example.coolweather.util;
 
 import android.text.TextUtils;
+import android.webkit.WebView;
 
 import com.example.coolweather.db.City;
 import com.example.coolweather.db.Country;
 import com.example.coolweather.db.Province;
+import com.example.coolweather.gson.Weather;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,6 +17,20 @@ import org.json.JSONObject;
  * Created by Administrator on 2017/5/5.
  */
 public class Utility {
+
+    public static Weather handleWeatherResponse(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     //解析处理 服务器返回的省级数据
     public static boolean handleProvinceResponse(String response){
         if(!TextUtils.isEmpty(response)){
